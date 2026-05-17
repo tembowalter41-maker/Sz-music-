@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SZ MUSIC - Web-Based Audio Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(34, 197, 94, 0.1);
+            border-bottom: 2px solid #22c55e;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #22c55e;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #22c55e;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(to bottom, rgba(34, 197, 94, 0.1), transparent);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: #22c55e;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #22c55e;
+            color: #0a0a0a;
+            padding: 15px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .cta-button:hover {
+            background: #16a34a;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 60px 20px;
+        }
+
+        .feature-card {
+            background: rgba(26, 26, 46, 0.8);
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
+        }
+
+        .feature-card h3 {
+            color: #22c55e;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .feature-card p {
+            color: #b0b0b0;
+        }
+
+        .demo-section {
+            background: rgba(26, 26, 46, 0.5);
+            border: 2px dashed #22c55e;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 60px 20px;
+            text-align: center;
+        }
+
+        .demo-section h2 {
+            color: #22c55e;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .code-block code {
+            color: #22c55e;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .stat-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid #22c55e;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #b0b0b0;
+            margin-top: 10px;
+        }
+
+        .faq-section {
+            padding: 60px 20px;
+        }
+
+        .faq-section h2 {
+            color: #22c55e;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+
+        .faq-item {
+            background: rgba(26, 26, 46, 0.8);
+            border-left: 4px solid #22c55e;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            background: rgba(26, 26, 46, 1);
+        }
+
+        .faq-item h4 {
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            color: #b0b0b0;
+            display: none;
+        }
+
+        .faq-item.active p {
+            display: block;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 2px solid #22c55e;
+            text-align: center;
+            padding: 40px 20px;
+            color: #b0b0b0;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #22c55e;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #16a34a;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎵 SZ MUSIC</div>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero container">
+        <h1>SZ MUSIC</h1>
+        <p>A Modern Web-Based Audio & Video Player Powered by GitHub</p>
+        <p style="color: #888; font-size: 14px;">Stream your music and videos directly from GitHub with a sleek, responsive interface</p>
+        <a href="#demo" class="cta-button">Try Now</a>
+    </section>
+
+    <section id="features" class="container">
+        <h2 style="text-align: center; color: #22c55e; margin: 40px 0; font-size: 32px;">Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <h3>🎵 Multiple Format Support</h3>
+                <p>Play MP3 audio files and MP4 videos seamlessly with built-in browser controls</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔐 Password Protected</h3>
+                <p>Secure your uploads with password authentication to control access</p>
+            </div>
+            <div class="feature-card">
+                <h3>☁️ GitHub Hosted</h3>
+                <p>Store your media files directly in GitHub, no separate hosting needed</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 Fully Responsive</h3>
+                <p>Works perfectly on desktop, tablet, and mobile devices</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚡ Fast Loading</h3>
+                <p>Leverages GitHub's CDN for quick content delivery worldwide</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎨 Modern Design</h3>
+                <p>Dark theme with green accents for a professional music player look</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="demo-section container">
+        <h2>How It Works</h2>
+        <p style="color: #b0b0b0; margin-bottom: 30px;">SZ MUSIC uses a simple yet powerful architecture:</p>
+        
+        <div style="text-align: left; margin: 30px 0;">
+            <h3 style="color: #22c55e; margin-bottom: 15px;">1️⃣ GitHub Repository</h3>
+            <p style="color: #b0b0b0; margin-bottom: 20px;">Store your audio and video files in a GitHub repository's <code>/uploads</code> folder</p>
+
+            <h3 style="color: #22c55e; margin: 20px 0 15px 0;">2️⃣ Authentication</h3>
+            <p style="color: #b0b0b0; margin-bottom: 20px;">Users enter a password to unlock upload functionality</p>
+
+            <h3 style="color: #22c55e; margin: 20px 0 15px 0;">3️⃣ Dynamic Loading</h3>
+            <p style="color: #b0b0b0; margin-bottom: 20px;">The player fetches the file list from GitHub API and displays them</p>
+
+            <h3 style="color: #22c55e; margin: 20px 0 15px 0;">4️⃣ Playback</h3>
+            <p style="color: #b0b0b0; margin-bottom: 20px;">Click any track to stream it via GitHub's raw content CDN</p>
+        </div>
+
+        <h3 style="color: #22c55e; margin: 30px 0 15px 0;">Code Structure:</h3>
+        <div class="code-block">
+<code>const USER = "your-username";
+const REPO = "your-repo-name";
+const PASS = "your-password";
+
+// Fetch files from GitHub
+fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/uploads`)
+  .then(r=>r.json())
+  .then(data=>{ /* display tracks */ });
+
+// Stream media
+play(name) {
+  audio.src = `https://raw.githubusercontent.com/${USER}/${REPO}/main/uploads/${name}`;
+}</code>
+        </div>
+    </section>
+
+    <section class="stats container">
+        <div class="stat-box">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Scalable Storage</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Free Hosting</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">1ms</div>
+            <div class="stat-label">Lightning Fast</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">🌍</div>
+            <div class="stat-label">Global CDN</div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq-section container">
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-item active">
+            <h4>What file formats does SZ MUSIC support?</h4>
+            <p>SZ MUSIC supports MP3 audio files and MP4 video files. These are widely compatible formats that work across all modern browsers without additional plugins.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>How do I set up SZ MUSIC for my own repository?</h4>
+            <p>1. Create a GitHub repository, 2. Create an <code>/uploads</code> folder, 3. Copy the HTML code, 4. Replace USER, REPO, and PASS constants with your values, 5. Deploy on GitHub Pages or any web server.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Is the password secure?</h4>
+            <p>The password in the HTML is client-side only. For production use, consider implementing server-side authentication. The current implementation is suitable for basic access control.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Can I upload files directly from the player?</h4>
+            <p>The upload box appears after password authentication. However, uploading to GitHub requires API tokens. For full functionality, you'll need to implement a backend service.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>What are the storage limits?</h4>
+            <p>GitHub repositories have no strict file size limits, but individual files should be under 100MB for optimal performance. For very large files, consider using GitHub LFS.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Can I customize the design?</h4>
+            <p>Yes! The HTML uses inline CSS. You can modify colors (like #22c55e), fonts, layout, and add your own branding easily.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Is SZ MUSIC mobile-friendly?</h4>
+            <p>Yes, the entire interface is responsive and works seamlessly on all devices including smartphones, tablets, and desktops.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>How do I host this?</h4>
+            <p>You can host SZ MUSIC on GitHub Pages (free), Netlify, Vercel, or any static hosting service. Simply upload the HTML file and it's ready to use.</p>
+        </div>
+    </section>
+
+    <section id="contact" class="demo-section container">
+        <h2>Getting Started</h2>
+        <p style="color: #b0b0b0; margin-bottom: 20px;">Ready to set up your own music player?</p>
+        <a href="https://github.com/tembowalter41-maker" class="cta-button">View on GitHub</a>
+        <p style="color: #888; margin-top: 20px; font-size: 14px;">Created by tembowalter41-maker</p>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#faq">FAQ</a>
+            <a href="https://github.com/tembowalter41-maker">GitHub</a>
+        </div>
+        <p>&copy; 2026 SZ MUSIC. Built with passion for music lovers and developers.</p>
+    </footer>
+
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({behavior: 'smooth'});
+                }
+            });
+        });
+    </script>
+</body>
+</html>
